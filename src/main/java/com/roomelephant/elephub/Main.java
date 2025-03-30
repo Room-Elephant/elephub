@@ -42,8 +42,11 @@ public class Main {
             System.exit(1);
         }
 
-        dockerClient.listContainersCmd().exec().forEach(container ->
-                System.out.println("Container: " + container.getImage()));
+        dockerClient.listContainersCmd().exec().forEach(container ->{
+
+                System.out.println("Container: " + container.getImage());
+            System.out.println("\t"+container.getLabels());
+        });
 
     }
 
@@ -57,8 +60,7 @@ public class Main {
                 .dockerHost(config.getDockerHost())
                 .build();
 
-        DockerClient dockerClient = DockerClientImpl.getInstance(config, httpClient);
-        return dockerClient;
+        return DockerClientImpl.getInstance(config, httpClient);
     }
 
     private static boolean hasInvalidPath(Path socketPath) {
