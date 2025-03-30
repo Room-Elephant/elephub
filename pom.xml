@@ -27,16 +27,19 @@
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
-
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- adapters -->
         <docker.java.version>3.4.2</docker.java.version>
-
+        <!-- internal -->
         <slfj.version>2.0.17</slfj.version>
         <logback.version>1.5.13</logback.version>
-
+        <!-- test -->
         <junit.version>5.11.4</junit.version>
+        <mockito.version>5.16.1</mockito.version>
     </properties>
 
     <dependencies>
+        <!-- adapters -->
         <dependency>
             <groupId>com.github.docker-java</groupId>
             <artifactId>docker-java</artifactId>
@@ -57,7 +60,7 @@
             <artifactId>docker-java-transport-okhttp</artifactId>
             <version>${docker.java.version}</version>
         </dependency>
-
+        <!-- internal -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
@@ -73,11 +76,17 @@
             <artifactId>slf4j-api</artifactId>
             <version>${slfj.version}</version>
         </dependency>
-
+        <!-- test -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
