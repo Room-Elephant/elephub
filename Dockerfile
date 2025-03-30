@@ -4,7 +4,7 @@ FROM eclipse-temurin:21-jre
 WORKDIR /opt
 
 # Copy application jar
-COPY target/elephub.jar elephub-service/app.jar
+COPY target/elephub-jar-with-dependencies.jar elephub-service/app.jar
 
 # Copy entrypoint.sh script
 COPY entrypoint.sh entrypoint.sh
