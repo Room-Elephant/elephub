@@ -1,2 +1,5 @@
-# elephub
-elephub
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Room-Elephant_elephub&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Room-Elephant_elephub)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=Room-Elephant_elephub&metric=bugs)](https://sonarcloud.io/summary/new_code?id=Room-Elephant_elephub)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=Room-Elephant_elephub&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=Room-Elephant_elephub)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Room-Elephant_elephub&metric=coverage)](https://sonarcloud.io/summary/new_code?id=Room-Elephant_elephub)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=Room-Elephant_elephub&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=Room-Elephant_elephub)
