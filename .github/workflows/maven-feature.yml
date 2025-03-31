@@ -20,6 +20,6 @@ jobs:
       - name: Package
         run: mvn -B -T 1C -B clean package -DskipTests=true
       - name: Checkstyle
-        run: mvn -B checkstyle:check options=-Dmaven.test.skip=true
+        run: mvn -B checkstyle:check -Dmaven.test.skip=true
       - name: Unit tests
         run: mvn -B test

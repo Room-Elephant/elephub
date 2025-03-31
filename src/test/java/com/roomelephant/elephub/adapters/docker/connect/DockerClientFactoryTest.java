@@ -63,10 +63,10 @@ class DockerClientFactoryTest {
 
   @Test
   void shouldThrowExceptionWhenPingFails() {
-    String dockerHost = "/var/run/docker.sock";
     when(dockerPathValidation.validate(any(Path.class))).thenReturn(true);
     when(dockerClient.pingCmd()).thenReturn(pingCmd);
     when(pingCmd.exec()).thenThrow(new RuntimeException("Connection failed"));
+    String dockerHost = "/var/run/docker.sock";
 
     assertThrows(DockerExceptionConnection.class, () -> victim.getDockerClient(dockerHost));
     verify(dockerPathValidation).validate(any(Path.class));
@@ -87,4 +87,4 @@ class DockerClientFactoryTest {
     verify(dockerClient).pingCmd();
     verify(pingCmd).exec();
   }
-} 
+}
