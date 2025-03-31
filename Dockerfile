@@ -1,13 +1,14 @@
 FROM eclipse-temurin:21-jre
 
-# Set working directory
+RUN addgroup -S nonroot \
+    && adduser -S nonroot -G nonroot
+
 WORKDIR /opt
 
-# Copy application jar
 COPY target/elephub-jar-with-dependencies.jar elephub-service/app.jar
-
-# Copy entrypoint.sh script
 COPY entrypoint.sh entrypoint.sh
 RUN chmod +x entrypoint.sh
 
+USER nonroot
 ENTRYPOINT ["./entrypoint.sh"]
+
