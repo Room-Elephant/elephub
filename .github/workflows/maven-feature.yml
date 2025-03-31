@@ -109,5 +109,9 @@ jobs:
           path: target
       - name: Official SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v5.1.0
+        with:
+          args: >
+            -Dsonar.organization=room-elephant
+            -Dsonar.projectKey=Room-Elephant_elephub
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
