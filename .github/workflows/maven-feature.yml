@@ -113,6 +113,6 @@ jobs:
           args: >
             -Dsonar.organization=room-elephant
             -Dsonar.projectKey=Room-Elephant_elephub
-            -Dsonar.java.binaries=target/classes
+            -Dsonar.java.binaries=target
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
