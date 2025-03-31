@@ -8,5 +8,6 @@ public class DockerExceptionConnection extends Exception {
   }
 
   public DockerExceptionConnection(Exception e) {
+    // TODO: eventually improve the exceptions
   }
 }

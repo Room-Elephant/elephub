@@ -21,6 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class SimpleValidationTest {
 
+  public static final String ERROR_MESSAGE = "Error";
   @Mock
   private ValidationRule<String> rule1;
   @Mock
@@ -82,7 +83,7 @@ class SimpleValidationTest {
   @Test
   void shouldReturnInvalidWhenFirstValidationFails() {
     when(rule1.validator()).thenReturn(p -> false);
-    when(rule1.errorMessage()).thenReturn("Error");
+    when(rule1.errorMessage()).thenReturn(ERROR_MESSAGE);
 
     ValidationResult result = victim.validate(null);
 
@@ -90,20 +91,20 @@ class SimpleValidationTest {
     verify(rule2, never()).validator();
     assertFalse(result.isValid());
     assertEquals(1, result.errors().size());
-    assertTrue(result.errors().contains("Error"));
+    assertTrue(result.errors().contains(ERROR_MESSAGE));
   }
 
   @Test
   void shouldReturnInvalidWhenSecondValidationFails() {
     when(rule1.validator()).thenReturn(p -> true);
     when(rule2.validator()).thenReturn(p -> false);
-    when(rule2.errorMessage()).thenReturn("Error");
+    when(rule2.errorMessage()).thenReturn(ERROR_MESSAGE);
 
     ValidationResult result = victim.validate("");
 
     assertFalse(result.isValid());
     assertEquals(1, result.errors().size());
-    assertTrue(result.errors().contains("Error"));
+    assertTrue(result.errors().contains(ERROR_MESSAGE));
   }
 
   @Test

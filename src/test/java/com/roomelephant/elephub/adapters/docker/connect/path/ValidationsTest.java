@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeAll;
@@ -25,8 +26,8 @@ class ValidationsTest {
   static Path validPath;
 
   @BeforeAll
-  static void setUp() {
-    invalidPath.toFile().delete();
+  static void setUp() throws IOException {
+    Files.delete(invalidPath);
     validPath.toFile().setReadable(true);
     validPath.toFile().setWritable(true);
   }

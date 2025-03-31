@@ -10,9 +10,9 @@ public class Validations {
 
   public static final Predicate<Path> HAS_PATH = Objects::nonNull;
 
-  public static final Predicate<Path> HAS_VALID_PATH = (socketPath) -> socketPath.toFile().exists();
+  public static final Predicate<Path> HAS_VALID_PATH = socketPath -> socketPath.toFile().exists();
 
-  public static final Predicate<Path> HAS_VALID_PERMISSIONS = (socketPath) ->
+  public static final Predicate<Path> HAS_VALID_PERMISSIONS = socketPath ->
       socketPath.toFile().canRead() && socketPath.toFile().canWrite();
 
 

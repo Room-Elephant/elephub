@@ -29,12 +29,12 @@ public class Main {
     try {
       dockerClient = factory.getDockerClient(dockerConfig.dockerPath());
     } catch (DockerExceptionConnection e) {
+      // TODO: improve exception handling
       throw new RuntimeException(new DockerExceptionConnection());
     }
 
     dockerClient.listContainersCmd().exec().forEach(container -> {
-      System.out.println("Container: " + container.getImage());
-      System.out.println("\t" + container.getLabels());
+      log.info("Container: {}, labels: {}", container.getImage(), container.getLabels());
     });
 
   }

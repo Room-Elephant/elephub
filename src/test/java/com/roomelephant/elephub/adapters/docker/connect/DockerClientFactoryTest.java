@@ -24,6 +24,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class DockerClientFactoryTest {
 
+  public static final String PATH = "/var/run/docker.sock";
   @Mock
   private DockerPathValidation dockerPathValidation;
 
@@ -54,10 +55,9 @@ class DockerClientFactoryTest {
 
   @Test
   void shouldThrowExceptionWhenPathValidationFails() {
-    String dockerHost = "/var/run/docker.sock";
     when(dockerPathValidation.validate(any(Path.class))).thenReturn(false);
 
-    assertThrows(DockerExceptionConnection.class, () -> victim.getDockerClient(dockerHost));
+    assertThrows(DockerExceptionConnection.class, () -> victim.getDockerClient(PATH));
     verify(dockerPathValidation).validate(any(Path.class));
   }
 
@@ -66,9 +66,8 @@ class DockerClientFactoryTest {
     when(dockerPathValidation.validate(any(Path.class))).thenReturn(true);
     when(dockerClient.pingCmd()).thenReturn(pingCmd);
     when(pingCmd.exec()).thenThrow(new RuntimeException("Connection failed"));
-    String dockerHost = "/var/run/docker.sock";
 
-    assertThrows(DockerExceptionConnection.class, () -> victim.getDockerClient(dockerHost));
+    assertThrows(DockerExceptionConnection.class, () -> victim.getDockerClient(PATH));
     verify(dockerPathValidation).validate(any(Path.class));
     verify(dockerClient).pingCmd();
     verify(pingCmd).exec();
@@ -76,11 +75,10 @@ class DockerClientFactoryTest {
 
   @Test
   void shouldReturnDockerClientWhenEverythingSucceeds() throws DockerExceptionConnection {
-    String dockerHost = "/var/run/docker.sock";
     when(dockerPathValidation.validate(any(Path.class))).thenReturn(true);
     when(dockerClient.pingCmd()).thenReturn(pingCmd);
 
-    DockerClient result = victim.getDockerClient(dockerHost);
+    DockerClient result = victim.getDockerClient(PATH);
 
     assertEquals(dockerClient, result);
     verify(dockerPathValidation).validate(any(Path.class));
