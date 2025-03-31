@@ -43,7 +43,7 @@
         <checkstyle.plugin.version>3.3.1</checkstyle.plugin.version>
         <jacoco.plugin.version>0.8.12</jacoco.plugin.version>
         <sunfire.plugin.version>3.5.2</sunfire.plugin.version>
-        <compiler.plugin.version>3.12.1</compiler.plugin.version>
+        <compiler.plugin.version>3.14.0</compiler.plugin.version>
         <puppycrawl.version>10.22.0</puppycrawl.version>
     </properties>
 
