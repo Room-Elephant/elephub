@@ -83,4 +83,4 @@ jobs:
           name: compiled-jar
           path: target
       - name: Run Unit Tests
-        run: mvn -B test -Dmaven.main.skip=true
+        run: mvn -B test
