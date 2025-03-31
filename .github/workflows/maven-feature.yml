@@ -17,7 +17,9 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
           cache: maven
-      - name: Maven Package
-        run: mvn -B clean package -DskipTests
-      - name: Maven Verify
-        run: mvn -B verify
+      - name: Package
+        run: mvn -B -T 1C -B clean package -DskipTests=true
+      - name: Checkstyle
+        run: mvn -B checkstyle:check options=-Dmaven.test.skip=true
+      - name: Unit tests
+        run: mvn -B test
