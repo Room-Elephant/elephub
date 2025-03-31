@@ -2,79 +2,51 @@ package com.roomelephant.elephub.adapters.docker.connect.path;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.never;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.roomelephant.elephub.validations.ValidationRule;
+import com.roomelephant.elephub.validations.ValidationResult;
+import com.roomelephant.elephub.validations.internal.SimpleValidation;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.io.TempDir;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 class DockerPathValidationTest {
-
-  @TempDir
-  Path tempDir;
+  public static final Path PATH = Path.of("");
   @Mock
-  ValidationRule<Path> mockRule1;
-  @Mock
-  ValidationRule<Path> mockRule2;
+  SimpleValidation<Path> pathValidation;
 
-  DockerPathValidation dockerPathValidation;
+  DockerPathValidation victim;
 
 
   @BeforeEach
   void setUp() {
-    List<ValidationRule<Path>> rules = Arrays.asList(mockRule1, mockRule2);
-    dockerPathValidation = new DockerPathValidation(rules);
+    victim = new DockerPathValidation(pathValidation);
   }
 
   @Test
-  void shouldReturnTrueWhenAllValidationsPass() {
-    Path path = tempDir.resolve("test.txt");
-    when(mockRule1.validator()).thenReturn(p -> true);
-    when(mockRule2.validator()).thenReturn(p -> true);
+  void shouldReturnTrueWhenValidationsPass() {
+    ValidationResult validationResult = new ValidationResult(List.of());
+    when(pathValidation.validate(any())).thenReturn(validationResult);
 
-    boolean result = dockerPathValidation.validate(path);
+    boolean result = victim.validate(PATH);
 
     assertTrue(result);
-    verify(mockRule1).validator();
-    verify(mockRule2).validator();
   }
 
   @Test
-  void shouldReturnFalseWhenFirstValidationFails() {
-    Path path = tempDir.resolve("test.txt");
-    when(mockRule1.validator()).thenReturn(p -> false);
-    when(mockRule1.errorMessage()).thenReturn("First validation failed");
+  void shouldReturnFalseWhenValidationFails() {
+    ValidationResult validationResult = new ValidationResult(List.of("Error"));
+    when(pathValidation.validate(any())).thenReturn(validationResult);
 
-    boolean result = dockerPathValidation.validate(path);
-
-    assertFalse(result);
-    verify(mockRule1).validator();
-    verify(mockRule1).errorMessage();
-    verify(mockRule2, never()).validator();
-  }
-
-  @Test
-  void shouldReturnFalseWhenSecondValidationFails() {
-    Path path = tempDir.resolve("test.txt");
-    when(mockRule1.validator()).thenReturn(p -> true);
-    when(mockRule2.validator()).thenReturn(p -> false);
-    when(mockRule2.errorMessage()).thenReturn("Second validation failed");
-
-    boolean result = dockerPathValidation.validate(path);
+    boolean result = victim.validate(PATH);
 
     assertFalse(result);
-    verify(mockRule1).validator();
-    verify(mockRule2).validator();
-    verify(mockRule2).errorMessage();
   }
 } 

@@ -1,8 +1,8 @@
 package com.roomelephant.elephub.adapters.docker.connect.config;
 
+import static com.roomelephant.elephub.adapters.docker.connect.path.Validations.HAS_PATH;
 import static com.roomelephant.elephub.adapters.docker.connect.path.Validations.HAS_VALID_PATH;
 import static com.roomelephant.elephub.adapters.docker.connect.path.Validations.HAS_VALID_PERMISSIONS;
-import static com.roomelephant.elephub.adapters.docker.connect.path.Validations.HAS_PATH;
 
 import com.roomelephant.elephub.util.ExcludeFromJacocoGeneratedReport;
 import com.roomelephant.elephub.validations.ValidationRule;
