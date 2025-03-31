@@ -66,7 +66,6 @@ class DockerClientFactoryTest {
     when(dockerPathValidation.validate(any(Path.class))).thenReturn(true);
     when(dockerClient.pingCmd()).thenReturn(pingCmd);
     when(pingCmd.exec()).thenThrow(new RuntimeException("Connection failed"));
-    String dockerHost = "/var/run/docker.sock";
 
     assertThrows(DockerExceptionConnection.class, () -> victim.getDockerClient(PATH));
     verify(dockerPathValidation).validate(any(Path.class));

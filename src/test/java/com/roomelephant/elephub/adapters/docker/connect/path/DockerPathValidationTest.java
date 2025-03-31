@@ -3,7 +3,6 @@ package com.roomelephant.elephub.adapters.docker.connect.path;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.roomelephant.elephub.validations.ValidationResult;
