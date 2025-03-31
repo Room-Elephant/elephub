@@ -108,6 +108,6 @@ jobs:
           name: compiled-jar
           path: target
       - name: Build and analyze
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:5.1.0.4751 -Dsonar.projectKey=Room-Elephant_elephub -Dsonar.organization=room-elephant
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:5.1.0.4751:sonar -Dsonar.projectKey=Room-Elephant_elephub -Dsonar.organization=room-elephant
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
