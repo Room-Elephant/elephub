@@ -107,8 +107,7 @@ jobs:
         with:
           name: compiled-jar
           path: target
-      - name: Build and analyze
+      - name: Official SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v5.1.0
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
