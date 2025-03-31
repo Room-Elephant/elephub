@@ -12,14 +12,14 @@ import java.nio.file.Path;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-class DockerClientFactory {
+public class DockerClientFactory {
   private final DockerPathValidation dockerPathValidation;
 
-  DockerClientFactory(DockerPathValidation dockerPathValidation) {
+  public DockerClientFactory(DockerPathValidation dockerPathValidation) {
     this.dockerPathValidation = dockerPathValidation;
   }
 
-  DockerClient getDockerClient(String dockerHost) throws DockerExceptionConnection {
+  public DockerClient getDockerClient(String dockerHost) throws DockerExceptionConnection {
     Path socketPath = Path.of(dockerHost);
 
     boolean valid = dockerPathValidation.validate(socketPath);
