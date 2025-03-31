@@ -42,10 +42,10 @@ class DockerClientFactory {
     try {
       client = DockerClientImpl.getInstance(config, httpClient);
 
-      log.debug("operation='main', message='Attempting to connect to Docker daemon...'");
+      log.debug("operation='getDockerClient', message='Attempting to connect to Docker daemon...'");
       client.pingCmd().exec();
     } catch (Exception e) {
-      log.error("operation='main', message='Failed to connect to Docker daemon: {}'",
+      log.error("operation='getDockerClient', message='Failed to connect to Docker daemon: {}'",
           e.getMessage(), e);
       throw new DockerExceptionConnection(e);
     }

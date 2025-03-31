@@ -21,7 +21,7 @@ public class DockerPathValidation {
     ValidationResult result = pathValidation.validate(path);
 
     if (!result.isValid()) {
-      log.error("operation='main', message='{}' socket='{}', user='{}', permissions='{can_read: {}, can_write: {}}'",
+      log.error("operation='validate', message='{}' socket='{}', user='{}', permissions='{can_read: {}, can_write: {}}'",
           result.errors().getFirst(), path.toAbsolutePath(), System.getProperty("user.name"),
           path.toFile().canRead(), path.toFile().canWrite());
 
