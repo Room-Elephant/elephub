@@ -33,10 +33,8 @@ public class Main {
       throw new RuntimeException(new DockerExceptionConnection());
     }
 
-    dockerClient.listContainersCmd().exec().forEach(container -> {
-      log.info("Container: {}, labels: {}", container.getImage(), container.getLabels());
-    });
-
+    dockerClient.listContainersCmd().exec().forEach(container ->
+        log.info("Container: {}, labels: {}", container.getImage(), container.getLabels()));
   }
 
 
