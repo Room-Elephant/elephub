@@ -7,7 +7,7 @@
 <p style="display: block; margin: 0 auto" >
     <img src="https://repository-images.githubusercontent.com/956247785/ce6368fe-ac78-47bf-afeb-b4b05cf6c2e3"
         alt="Picture"
-        width="1280"
-        height="640"
+        width="640"
+        height="320"
     />
 </p>
