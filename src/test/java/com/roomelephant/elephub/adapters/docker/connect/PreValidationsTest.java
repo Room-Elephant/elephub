@@ -70,7 +70,8 @@ class PreValidationsTest {
 
   private static Stream<Arguments> providePathTestCases() {
     return Stream.of(
-        Arguments.of(null, "Invalid path: 'null'", "null path"),
+        Arguments.of(null, "Docker socket cannot be null: 'null'", "null path"),
+        Arguments.of("", "Docker socket cannot be blank: ''", "blank path"),
         Arguments.of(invalidPath, "Docker socket not found: '" + invalidPath + "'", "invalid path")
     );
   }
