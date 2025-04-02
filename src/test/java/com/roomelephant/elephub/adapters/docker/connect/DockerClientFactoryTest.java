@@ -3,15 +3,13 @@ package com.roomelephant.elephub.adapters.docker.connect;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verifyNoInteractions;
 
 import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.command.PingCmd;
 import com.github.dockerjava.core.DockerClientImpl;
-import com.roomelephant.elephub.adapters.docker.connect.exceptions.DockerExceptionConnection;
-import com.roomelephant.elephub.adapters.docker.connect.path.DockerPathValidation;
-import java.nio.file.Path;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,24 +22,22 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class DockerClientFactoryTest {
 
-  public static final String PATH = "/var/run/docker.sock";
+  static final String PATH = "/var/run/docker.sock";
   @Mock
-  private DockerPathValidation dockerPathValidation;
+  Validations<String> preValidations;
+  @Mock
+  Validations<DockerClient> postValidations;
 
   @Mock
-  private DockerClient dockerClient;
+  DockerClient dockerClient;
 
-  @Mock
-  private PingCmd pingCmd;
+  MockedStatic<DockerClientImpl> dockerClientImplMockedStatic;
 
-  private MockedStatic<DockerClientImpl> dockerClientImplMockedStatic;
-
-  private DockerClientFactory victim;
-
+  DockerClientFactory victim;
 
   @BeforeEach
   void setUp() {
-    victim = new DockerClientFactory(dockerPathValidation);
+    victim = new DockerClientFactory(preValidations, postValidations);
     dockerClientImplMockedStatic = Mockito.mockStatic(DockerClientImpl.class);
     dockerClientImplMockedStatic.when(() -> DockerClientImpl.getInstance(any(), any())).thenReturn(dockerClient);
   }
@@ -54,35 +50,33 @@ class DockerClientFactoryTest {
   }
 
   @Test
-  void shouldThrowExceptionWhenPathValidationFails() {
-    when(dockerPathValidation.validate(any(Path.class))).thenReturn(false);
+  void shouldThrowExceptionWhenPreValidationFails() throws DockerConnectionException {
+    doThrow(DockerConnectionException.class).when(preValidations).validate(PATH);
 
-    assertThrows(DockerExceptionConnection.class, () -> victim.getDockerClient(PATH));
-    verify(dockerPathValidation).validate(any(Path.class));
+    assertThrows(DockerConnectionException.class, () -> victim.getDockerClient(PATH));
+    verify(preValidations).validate(PATH);
+    verifyNoInteractions(postValidations);
   }
 
   @Test
-  void shouldThrowExceptionWhenPingFails() {
-    when(dockerPathValidation.validate(any(Path.class))).thenReturn(true);
-    when(dockerClient.pingCmd()).thenReturn(pingCmd);
-    when(pingCmd.exec()).thenThrow(new RuntimeException("Connection failed"));
+  void shouldThrowExceptionWhenPostValidationFails() throws DockerConnectionException {
+    doNothing().when(preValidations).validate(PATH);
+    doThrow(DockerConnectionException.class).when(postValidations).validate(dockerClient);
 
-    assertThrows(DockerExceptionConnection.class, () -> victim.getDockerClient(PATH));
-    verify(dockerPathValidation).validate(any(Path.class));
-    verify(dockerClient).pingCmd();
-    verify(pingCmd).exec();
+    assertThrows(DockerConnectionException.class, () -> victim.getDockerClient(PATH));
+    verify(preValidations).validate(PATH);
+    verify(postValidations).validate(dockerClient);
   }
 
   @Test
-  void shouldReturnDockerClientWhenEverythingSucceeds() throws DockerExceptionConnection {
-    when(dockerPathValidation.validate(any(Path.class))).thenReturn(true);
-    when(dockerClient.pingCmd()).thenReturn(pingCmd);
+  void shouldReturnDockerClientWhenEverythingSucceeds() throws DockerConnectionException {
+    doNothing().when(preValidations).validate(PATH);
+    doNothing().when(postValidations).validate(dockerClient);
 
     DockerClient result = victim.getDockerClient(PATH);
 
     assertEquals(dockerClient, result);
-    verify(dockerPathValidation).validate(any(Path.class));
-    verify(dockerClient).pingCmd();
-    verify(pingCmd).exec();
+    verify(preValidations).validate(PATH);
+    verify(postValidations).validate(dockerClient);
   }
 }

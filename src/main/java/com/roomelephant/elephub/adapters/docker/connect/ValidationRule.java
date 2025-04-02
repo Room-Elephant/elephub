@@ -1,8 +1,8 @@
-package com.roomelephant.elephub.validations;
+package com.roomelephant.elephub.adapters.docker.connect;
 
 import com.roomelephant.elephub.util.ExcludeFromJacocoGeneratedReport;
 import java.util.function.Predicate;
 
 @ExcludeFromJacocoGeneratedReport
-public record ValidationRule<T>(Predicate<T> validator, String errorMessage) {
+record ValidationRule<T>(Predicate<T> validator, String errorMessage) {
 }

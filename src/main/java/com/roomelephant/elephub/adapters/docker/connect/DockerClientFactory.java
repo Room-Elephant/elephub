@@ -6,50 +6,53 @@ import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.DockerClientImpl;
 import com.github.dockerjava.okhttp.OkDockerHttpClient;
 import com.github.dockerjava.transport.DockerHttpClient;
-import com.roomelephant.elephub.adapters.docker.connect.exceptions.DockerExceptionConnection;
-import com.roomelephant.elephub.adapters.docker.connect.path.DockerPathValidation;
-import java.nio.file.Path;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class DockerClientFactory {
-  private final DockerPathValidation dockerPathValidation;
+  private final Validations<String> preValidations;
+  private final Validations<DockerClient> postValidations;
 
-  public DockerClientFactory(DockerPathValidation dockerPathValidation) {
-    this.dockerPathValidation = dockerPathValidation;
+  public DockerClientFactory(Validations<String> preValidations, Validations<DockerClient> postValidations) {
+    this.preValidations = preValidations;
+    this.postValidations = postValidations;
   }
 
-  public DockerClient getDockerClient(String dockerHost) throws DockerExceptionConnection {
-    Path socketPath = Path.of(dockerHost);
+  public DockerClient getDockerClient(String dockerHost) throws DockerConnectionException {
+    preValidations.validate(dockerHost);
 
-    boolean valid = dockerPathValidation.validate(socketPath);
-    if (!valid) {
-      throw new DockerExceptionConnection();
+    DockerClient client = createDockerClient(dockerHost);
+
+    postValidations.validate(client);
+
+    return client;
+  }
+
+  private DockerClient createDockerClient(String dockerHost) throws DockerConnectionException {
+    try {
+      DockerClientConfig config = createDockerClientConfig(dockerHost);
+      DockerHttpClient httpClient = createDockerHttpClient(config);
+
+      return DockerClientImpl.getInstance(config, httpClient);
+    } catch (Exception e) {
+      log.error("operation='createDockerClient', message='Failed to create docker client': {}'",
+          e.getMessage(), e);
+      throw new DockerConnectionException("Could not create docker client", e);
     }
+  }
 
-    DockerClientConfig config = DefaultDockerClientConfig
+  private static DockerHttpClient createDockerHttpClient(DockerClientConfig config) {
+    return new OkDockerHttpClient
+        .Builder()
+        .dockerHost(config.getDockerHost())
+        .build();
+  }
+
+  private DockerClientConfig createDockerClientConfig(String dockerHost) {
+    return DefaultDockerClientConfig
         .createDefaultConfigBuilder()
         .withDockerHost("unix://" + dockerHost)
         .withDockerTlsVerify(false)
         .build();
-
-    DockerHttpClient httpClient = new OkDockerHttpClient
-        .Builder()
-        .dockerHost(config.getDockerHost())
-        .build();
-
-    DockerClient client;
-    try {
-      client = DockerClientImpl.getInstance(config, httpClient);
-
-      log.debug("operation='getDockerClient', message='Attempting to connect to Docker daemon...'");
-      client.pingCmd().exec();
-    } catch (Exception e) {
-      log.error("operation='getDockerClient', message='Failed to connect to Docker daemon: {}'",
-          e.getMessage(), e);
-      throw new DockerExceptionConnection(e);
-    }
-
-    return client;
   }
 }
