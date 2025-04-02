@@ -2,11 +2,12 @@ package com.roomelephant.elephub.adapters.docker.connect;
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.function.Predicate;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class PreValidations implements Validations<String> {
-  private final List<ValidationRule<Path>> rules = List.of(
+  private static final List<ValidationRule<Path>> rules = List.of(
       new ValidationRule<>(
           socketPath -> socketPath.toFile().exists(),
           "Docker socket not found"),
@@ -33,5 +34,8 @@ public class PreValidations implements Validations<String> {
         throw new DockerConnectionException(dockerHost, rule.errorMessage());
       }
     }
+  }
+
+  private record ValidationRule<T>(Predicate<T> validator, String errorMessage) {
   }
 }
