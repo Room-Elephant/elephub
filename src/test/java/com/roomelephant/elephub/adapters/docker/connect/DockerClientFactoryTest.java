@@ -50,6 +50,18 @@ class DockerClientFactoryTest {
   }
 
   @Test
+  void shouldReturnDockerClientWhenEverythingSucceeds() throws DockerConnectionException {
+    doNothing().when(preValidations).validate(PATH);
+    doNothing().when(postValidations).validate(dockerClient);
+
+    DockerClient result = victim.getDockerClient(PATH);
+
+    assertEquals(dockerClient, result);
+    verify(preValidations).validate(PATH);
+    verify(postValidations).validate(dockerClient);
+  }
+
+  @Test
   void shouldThrowExceptionWhenPreValidationFails() throws DockerConnectionException {
     doThrow(DockerConnectionException.class).when(preValidations).validate(PATH);
 
@@ -69,14 +81,12 @@ class DockerClientFactoryTest {
   }
 
   @Test
-  void shouldReturnDockerClientWhenEverythingSucceeds() throws DockerConnectionException {
+  void shouldThrowExceptionWhenClientCreationFails() throws DockerConnectionException {
     doNothing().when(preValidations).validate(PATH);
-    doNothing().when(postValidations).validate(dockerClient);
+    dockerClientImplMockedStatic.when(() -> DockerClientImpl.getInstance(any(), any())).thenThrow(RuntimeException.class);
 
-    DockerClient result = victim.getDockerClient(PATH);
-
-    assertEquals(dockerClient, result);
+    assertThrows(DockerConnectionException.class, () -> victim.getDockerClient(PATH));
     verify(preValidations).validate(PATH);
-    verify(postValidations).validate(dockerClient);
+    verifyNoInteractions(postValidations);
   }
 }
