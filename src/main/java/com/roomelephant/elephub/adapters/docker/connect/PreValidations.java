@@ -35,7 +35,7 @@ public class PreValidations implements Validations<String> {
     testRules(pathRules, socketPath);
   }
 
-  private static <T> void testRules(List<ValidationRule<T>> rules, T path) throws DockerConnectionException {
+  private <T> void testRules(List<ValidationRule<T>> rules, T path) throws DockerConnectionException {
     for (var rule : rules) {
       if (!rule.validator().test(path)) {
         String parsedPath = path == null ? null : path.toString();
@@ -46,7 +46,7 @@ public class PreValidations implements Validations<String> {
     }
   }
 
-  private static void handleFailure(String rule, String dockerHost, boolean canRead, boolean canWrite)
+  private void handleFailure(String rule, String dockerHost, boolean canRead, boolean canWrite)
       throws DockerConnectionException {
     log.error(
         "operation='handleFailure', message='{}' socket='{}', user='{}', permissions='{can_read: {}, can_write: {}}'",
