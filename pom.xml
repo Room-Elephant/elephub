@@ -41,7 +41,7 @@
         <!-- build -->
         <assembly.plugin.version>3.7.1</assembly.plugin.version>
         <checkstyle.plugin.version>3.6.0</checkstyle.plugin.version>
-        <jacoco.plugin.version>0.8.12</jacoco.plugin.version>
+        <jacoco.plugin.version>0.8.13</jacoco.plugin.version>
         <sunfire.plugin.version>3.5.2</sunfire.plugin.version>
         <compiler.plugin.version>3.14.0</compiler.plugin.version>
         <puppycrawl.version>10.22.0</puppycrawl.version>
