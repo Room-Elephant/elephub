@@ -6,12 +6,15 @@ import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.DockerClientImpl;
 import com.github.dockerjava.okhttp.OkDockerHttpClient;
 import com.github.dockerjava.transport.DockerHttpClient;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class DockerClientFactory {
   private final Validations<String> preValidations;
   private final Validations<DockerClient> postValidations;
+  private final ConcurrentMap<String, DockerClient> clientCache = new ConcurrentHashMap<>();
 
   public DockerClientFactory(Validations<String> preValidations, Validations<DockerClient> postValidations) {
     this.preValidations = preValidations;
@@ -20,12 +23,11 @@ public class DockerClientFactory {
 
   public DockerClient getDockerClient(String dockerHost) throws DockerConnectionException {
     preValidations.validate(dockerHost);
-
-    DockerClient client = createDockerClient(dockerHost);
-
-    postValidations.validate(client);
-
-    return client;
+    return clientCache.computeIfAbsent(dockerHost, host -> {
+      DockerClient client = createDockerClient(dockerHost);
+      postValidations.validate(client);
+      return client;
+    });
   }
 
   private DockerClient createDockerClient(String dockerHost) throws DockerConnectionException {
@@ -41,7 +43,7 @@ public class DockerClientFactory {
     }
   }
 
-  private static DockerHttpClient createDockerHttpClient(DockerClientConfig config) {
+  private DockerHttpClient createDockerHttpClient(DockerClientConfig config) {
     return new OkDockerHttpClient
         .Builder()
         .dockerHost(config.getDockerHost())
