@@ -37,6 +37,9 @@ class BasicInformationEnricherTest {
   @Mock
   private ContainerPort containerPort2;
 
+  @Mock
+  private ContainerPort containerPort3;
+
   @BeforeEach
   void setUp() {
     when(externalContainer.getCreated()).thenReturn(EPOCH);
@@ -46,7 +49,8 @@ class BasicInformationEnricherTest {
 
     when(containerPort1.getPublicPort()).thenReturn(PORT1);
     when(containerPort2.getPublicPort()).thenReturn(PORT2);
-    when(externalContainer.getPorts()).thenReturn(new ContainerPort[] {containerPort1, containerPort2});
+    when(containerPort3.getPublicPort()).thenReturn(null);
+    when(externalContainer.getPorts()).thenReturn(new ContainerPort[] {containerPort1, containerPort2, containerPort3});
   }
 
   @Test
@@ -68,5 +72,6 @@ class BasicInformationEnricherTest {
     verify(externalContainer).getPorts();
     verify(containerPort1, times(2)).getPublicPort();
     verify(containerPort2, times(2)).getPublicPort();
+    verify(containerPort3, times(1)).getPublicPort();
   }
 }
