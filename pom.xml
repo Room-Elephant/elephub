@@ -44,7 +44,7 @@
         <jacoco.plugin.version>0.8.12</jacoco.plugin.version>
         <sunfire.plugin.version>3.5.2</sunfire.plugin.version>
         <compiler.plugin.version>3.14.0</compiler.plugin.version>
-        <puppycrawl.version>10.22.0</puppycrawl.version>
+        <puppycrawl.version>10.23.1</puppycrawl.version>
     </properties>
 
     <dependencies>
