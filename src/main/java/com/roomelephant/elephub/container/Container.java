@@ -3,6 +3,7 @@ package com.roomelephant.elephub.container;
 import com.roomelephant.elephub.util.ExcludeFromJacocoGeneratedReport;
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -11,15 +12,16 @@ import lombok.ToString;
 @Builder
 @ToString
 @EqualsAndHashCode
-public class Container implements BaseDockerInformation {
+public final class Container implements BaseDockerInformation {
   @ToString.Exclude
   private final com.github.dockerjava.api.model.Container inner;
 
-  private Instant created;
-  private String image;
-  private List<String> names;
-  private State state;
-  private List<String> ports;
+  private final Instant created;
+  private final String image;
+  private final List<String> names;
+  private final State state;
+  private final List<String> ports;
+  private final Map<String, String> labels;
 
   @Override
   public Instant getCreated() {
@@ -44,5 +46,10 @@ public class Container implements BaseDockerInformation {
   @Override
   public List<String> getPorts() {
     return ports;
+  }
+
+  @Override
+  public Map<String, String> getLabels() {
+    return labels;
   }
 }

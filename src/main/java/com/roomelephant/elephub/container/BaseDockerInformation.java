@@ -2,13 +2,14 @@ package com.roomelephant.elephub.container;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Represents basic information retrieved from a Docker container.
  * This interface provides access to common attributes of a Docker container.
  * The data is directly derived from the Docker API's Container information.
  */
-public interface BaseDockerInformation {
+public sealed interface BaseDockerInformation permits Container {
   /**
    * Retrieves the creation timestamp of the Docker container.
    *
@@ -44,4 +45,11 @@ public interface BaseDockerInformation {
    * @return A {@link List} of Strings representing the exposed getPorts. Example: ["3000"].
    */
   List<String> getPorts();
+
+  /**
+   * Retrieves the label of the Docker container grouped by domain
+   *
+   * @return An {@link Map} representing the labels.
+   */
+  Map<String, String> getLabels();
 }

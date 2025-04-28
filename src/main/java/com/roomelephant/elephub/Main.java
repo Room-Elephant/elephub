@@ -7,13 +7,9 @@ import com.roomelephant.elephub.adapters.docker.connect.PostValidations;
 import com.roomelephant.elephub.adapters.docker.connect.PreValidations;
 import com.roomelephant.elephub.adapters.docker.connect.Validations;
 import com.roomelephant.elephub.adapters.docker.fetch.ContainerCmd;
-import com.roomelephant.elephub.adapters.docker.fetch.mapper.EnrichmentChain;
-import com.roomelephant.elephub.adapters.docker.fetch.mapper.enricher.BasicInformationEnricher;
-import com.roomelephant.elephub.adapters.docker.fetch.mapper.enricher.InnerEnricher;
-import com.roomelephant.elephub.container.Container;
+import com.roomelephant.elephub.adapters.docker.fetch.mapper.DockerContainerToContainer;
 import com.roomelephant.elephub.util.ExcludeFromJacocoGeneratedReport;
 import lombok.extern.slf4j.Slf4j;
-
 
 @Slf4j
 @ExcludeFromJacocoGeneratedReport
@@ -39,12 +35,13 @@ public class Main {
       System.exit(1);
     }
 
-    EnrichmentChain<com.github.dockerjava.api.model.Container, Container.ContainerBuilder> chain
+    /*EnrichmentChain<com.github.dockerjava.api.model.Container, Container.ContainerBuilder> chain
         = new EnrichmentChain<>();
     chain.addEnricher(new InnerEnricher())
-        .addEnricher(new BasicInformationEnricher());
+        .addEnricher(new BasicInformationEnricher());*/
 
-    ContainerCmd containerCmd = new ContainerCmd(dockerClient, chain);
+    DockerContainerToContainer converter = new DockerContainerToContainer();
+    ContainerCmd containerCmd = new ContainerCmd(dockerClient, converter);
 
 
     containerCmd.fetch().forEach(container ->

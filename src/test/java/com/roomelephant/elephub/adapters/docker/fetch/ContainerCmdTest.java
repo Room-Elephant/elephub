@@ -7,8 +7,8 @@ import static org.mockito.Mockito.when;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.ListContainersCmd;
-import com.roomelephant.elephub.adapters.docker.fetch.mapper.EnrichmentChain;
 import com.roomelephant.elephub.container.Container;
+import com.roomelephant.elephub.util.Converter;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,7 +23,7 @@ class ContainerCmdTest {
   DockerClient dockerClient;
 
   @Mock
-  EnrichmentChain<com.github.dockerjava.api.model.Container, Container.ContainerBuilder> enricher;
+  Converter<Container, com.github.dockerjava.api.model.Container> converter;
 
   @Mock
   ListContainersCmd listContainersCmd;
@@ -32,16 +32,13 @@ class ContainerCmdTest {
   com.github.dockerjava.api.model.Container dockerContainer;
 
   @Mock
-  Container.ContainerBuilder containerBuilder;
-
-  @Mock
   Container container;
 
   ContainerCmd victim;
 
   @BeforeEach
   void setUp() {
-    victim = new ContainerCmd(dockerClient, enricher);
+    victim = new ContainerCmd(dockerClient, converter);
   }
 
   @Test
@@ -49,8 +46,7 @@ class ContainerCmdTest {
     when(dockerClient.listContainersCmd()).thenReturn(listContainersCmd);
     when(listContainersCmd.exec()).thenReturn(List.of(dockerContainer));
 
-    when(enricher.enrich(any(), any())).thenReturn(containerBuilder);
-    when(containerBuilder.build()).thenReturn(container);
+    when(converter.convert(dockerContainer)).thenReturn(container);
 
     List<Container> result = victim.fetch();
 
@@ -59,7 +55,6 @@ class ContainerCmdTest {
 
     verify(dockerClient).listContainersCmd();
     verify(listContainersCmd).exec();
-    verify(enricher).enrich(any(), any());
-    verify(containerBuilder).build();
+    verify(converter).convert(any());
   }
 }

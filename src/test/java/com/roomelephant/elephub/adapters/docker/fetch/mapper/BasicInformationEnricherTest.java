@@ -1,4 +1,4 @@
-package com.roomelephant.elephub.adapters.docker.fetch.mapper.enricher;
+package com.roomelephant.elephub.adapters.docker.fetch.mapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.times;
@@ -9,7 +9,9 @@ import com.github.dockerjava.api.model.ContainerPort;
 import com.roomelephant.elephub.container.Container;
 import com.roomelephant.elephub.container.State;
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,16 +19,17 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class BasicInformationEnricherTest {
+class DockerContainerToContainerTest {
 
-  public static final long EPOCH = 1714220000L;
-  public static final String IMAGE = "test-image:latest";
-  public static final String NAME = "test-container";
-  public static final String STATE = "running";
-  public static final int PORT1 = 8080;
-  public static final int PORT2 = 9090;
+  private static final long EPOCH = 1714220000L;
+  private static final String IMAGE = "test-image:latest";
+  private static final String NAME = "test-container";
+  private static final String STATE = "running";
+  private static final int PORT1 = 8080;
+  private static final int PORT2 = 9090;
+  private static final Map<String,String> LABELS = new HashMap<>();
 
-  private final BasicInformationEnricher victim = new BasicInformationEnricher();
+  private final DockerContainerToContainer victim = new DockerContainerToContainer();
 
   @Mock
   private com.github.dockerjava.api.model.Container externalContainer;
@@ -46,6 +49,7 @@ class BasicInformationEnricherTest {
     when(externalContainer.getImage()).thenReturn(IMAGE);
     when(externalContainer.getNames()).thenReturn(new String[] {NAME});
     when(externalContainer.getState()).thenReturn(STATE);
+    when(externalContainer.getLabels()).thenReturn(LABELS);
 
     when(containerPort1.getPublicPort()).thenReturn(PORT1);
     when(containerPort2.getPublicPort()).thenReturn(PORT2);
@@ -54,11 +58,8 @@ class BasicInformationEnricherTest {
   }
 
   @Test
-  void shouldEnrichBuilderWithContainerInformation() {
-    Container.ContainerBuilder builder = Container.builder();
-
-    victim.enrich(externalContainer, builder);
-    Container result = builder.build();
+  void shouldConvert() {
+    Container result = victim.convert(externalContainer);
 
     assertEquals(Instant.ofEpochSecond(EPOCH), result.getCreated());
     assertEquals(IMAGE, result.getImage());
@@ -70,6 +71,7 @@ class BasicInformationEnricherTest {
     verify(externalContainer).getNames();
     verify(externalContainer).getState();
     verify(externalContainer).getPorts();
+    verify(externalContainer).getLabels();
     verify(containerPort1, times(2)).getPublicPort();
     verify(containerPort2, times(2)).getPublicPort();
     verify(containerPort3, times(1)).getPublicPort();
