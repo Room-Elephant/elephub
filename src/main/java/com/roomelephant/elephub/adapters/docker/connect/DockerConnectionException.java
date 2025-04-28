@@ -3,7 +3,7 @@ package com.roomelephant.elephub.adapters.docker.connect;
 import com.roomelephant.elephub.util.ExcludeFromJacocoGeneratedReport;
 
 @ExcludeFromJacocoGeneratedReport
-public class DockerConnectionException extends Exception {
+public class DockerConnectionException extends RuntimeException {
   public DockerConnectionException(String message, Exception e) {
     super(message, e);
   }
