@@ -1,4 +1,4 @@
-package com.roomelephant.elephub.adapters.docker.fetch.mapper;
+package com.roomelephant.elephub;
 
 import java.util.ArrayList;
 import java.util.List;

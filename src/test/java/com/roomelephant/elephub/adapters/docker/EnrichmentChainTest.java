@@ -1,4 +1,4 @@
-package com.roomelephant.elephub.adapters.docker.fetch;
+package com.roomelephant.elephub.adapters.docker;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -7,8 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 
-import com.roomelephant.elephub.adapters.docker.fetch.mapper.Enricher;
-import com.roomelephant.elephub.adapters.docker.fetch.mapper.EnrichmentChain;
+import com.roomelephant.elephub.Enricher;
+import com.roomelephant.elephub.EnrichmentChain;
 import lombok.Getter;
 import lombok.Setter;
 import org.junit.jupiter.api.BeforeEach;

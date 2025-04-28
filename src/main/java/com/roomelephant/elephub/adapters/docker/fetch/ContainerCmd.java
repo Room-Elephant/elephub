@@ -1,27 +1,25 @@
 package com.roomelephant.elephub.adapters.docker.fetch;
 
 import com.github.dockerjava.api.DockerClient;
-import com.roomelephant.elephub.adapters.docker.fetch.mapper.EnrichmentChain;
 import com.roomelephant.elephub.container.Container;
+import com.roomelephant.elephub.util.Converter;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class ContainerCmd {
   private final DockerClient dockerClient;
-  private final EnrichmentChain<com.github.dockerjava.api.model.Container, Container.ContainerBuilder> enricher;
+  private final Converter<Container, com.github.dockerjava.api.model.Container> converter;
 
   public ContainerCmd(DockerClient dockerClient,
-                      EnrichmentChain<com.github.dockerjava.api.model.Container, Container.ContainerBuilder> enricher) {
+                      Converter<Container, com.github.dockerjava.api.model.Container> converter) {
     this.dockerClient = dockerClient;
-    this.enricher = enricher;
+    this.converter = converter;
   }
 
   public List<Container> fetch() {
     return dockerClient.listContainersCmd().exec().stream()
-        .map(dockerContainer ->
-            enricher.enrich(dockerContainer, Container::builder).build()
-        )
+        .map(converter::convert)
         .toList();
   }
 }
