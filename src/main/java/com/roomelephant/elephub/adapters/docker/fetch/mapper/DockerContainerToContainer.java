@@ -1,6 +1,5 @@
 package com.roomelephant.elephub.adapters.docker.fetch.mapper;
 
-
 import com.roomelephant.elephub.container.Container;
 import com.roomelephant.elephub.container.State;
 import com.roomelephant.elephub.util.Converter;
