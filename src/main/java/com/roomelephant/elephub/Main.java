@@ -34,14 +34,8 @@ public class Main {
       System.exit(1);
     }
 
-    /*EnrichmentChain<com.github.dockerjava.api.model.Container, Container.ContainerBuilder> chain
-        = new EnrichmentChain<>();
-    chain.addEnricher(new InnerEnricher())
-        .addEnricher(new BasicInformationEnricher());*/
-
     DockerCmd dockerCmd = new DockerCmd(dockerClient);
-
-
+    
     dockerCmd.getContainers().forEach(container ->
         log.info("Container: {}", container)
     );
