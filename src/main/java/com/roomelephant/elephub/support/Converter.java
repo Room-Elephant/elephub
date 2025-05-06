@@ -1,4 +1,4 @@
-package com.roomelephant.elephub.util;
+package com.roomelephant.elephub.support;
 
 /**
  * A generic interface for converting an object of type {@code O} to an object of type {@code T}.

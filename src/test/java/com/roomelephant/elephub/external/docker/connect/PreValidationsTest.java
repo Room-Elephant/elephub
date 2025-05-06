@@ -1,4 +1,4 @@
-package com.roomelephant.elephub.adapters.docker.connect;
+package com.roomelephant.elephub.external.docker.connect;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;

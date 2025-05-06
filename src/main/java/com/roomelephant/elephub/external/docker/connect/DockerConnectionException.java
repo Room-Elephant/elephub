@@ -1,6 +1,6 @@
-package com.roomelephant.elephub.adapters.docker.connect;
+package com.roomelephant.elephub.external.docker.connect;
 
-import com.roomelephant.elephub.util.ExcludeFromJacocoGeneratedReport;
+import com.roomelephant.elephub.support.ExcludeFromJacocoGeneratedReport;
 
 @ExcludeFromJacocoGeneratedReport
 public class DockerConnectionException extends RuntimeException {
