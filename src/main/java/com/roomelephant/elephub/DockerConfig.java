@@ -1,6 +1,6 @@
 package com.roomelephant.elephub;
 
-import com.roomelephant.elephub.util.ExcludeFromJacocoGeneratedReport;
+import com.roomelephant.elephub.support.ExcludeFromJacocoGeneratedReport;
 
 @ExcludeFromJacocoGeneratedReport
 public class DockerConfig {

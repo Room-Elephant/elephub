@@ -1,4 +1,4 @@
-package com.roomelephant.elephub.adapters.docker.connect;
+package com.roomelephant.elephub.external.docker.connect;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -48,8 +48,9 @@ class PreValidationsTest {
   @ParameterizedTest(name = "{2}")
   @MethodSource("providePathTestCases")
   void shouldThrowOnInvalidPath(Path path, String errorMessage, String testCase) {
+    String finalPath = path == null ? null : path.toString();
     DockerConnectionException dockerConnectionException =
-        assertThrows(DockerConnectionException.class, () -> victim.validate(path == null ? null : path.toString()));
+        assertThrows(DockerConnectionException.class, () -> victim.validate(finalPath));
 
     assertEquals(errorMessage, dockerConnectionException.getMessage());
   }
@@ -60,10 +61,10 @@ class PreValidationsTest {
     tempDir.toFile().setReadable(readable);
     tempDir.toFile().setWritable(writable);
     String message = "Insufficient permissions to access Docker socket" + ": '" + tempDir + "'";
-
+    String finalPath = tempDir.toString();
 
     DockerConnectionException dockerConnectionException =
-        assertThrows(DockerConnectionException.class, () -> victim.validate(tempDir.toString()));
+        assertThrows(DockerConnectionException.class, () -> victim.validate(finalPath));
 
     assertEquals(message, dockerConnectionException.getMessage());
   }

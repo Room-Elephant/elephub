@@ -1,4 +1,4 @@
-package com.roomelephant.elephub.adapters.docker.connect;
+package com.roomelephant.elephub.external.docker.connect;
 
 /**
  * A generic interface for defining validation logic for various types of input.
