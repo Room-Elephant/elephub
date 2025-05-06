@@ -1,4 +1,4 @@
-package com.roomelephant.elephub.adapters.docker.connect;
+package com.roomelephant.elephub.external.docker.connect;
 
 import com.github.dockerjava.api.DockerClient;
 import lombok.extern.slf4j.Slf4j;
