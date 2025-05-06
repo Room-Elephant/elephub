@@ -1,4 +1,4 @@
-package com.roomelephant.elephub.application;
+package com.roomelephant.elephub.core;
 
 import java.util.ArrayList;
 import java.util.List;

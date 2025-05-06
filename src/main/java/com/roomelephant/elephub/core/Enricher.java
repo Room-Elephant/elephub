@@ -1,4 +1,4 @@
-package com.roomelephant.elephub.application;
+package com.roomelephant.elephub.core;
 
 /**
  * Defines a contract for enriching an internal object using data from an external source object.

@@ -28,7 +28,7 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- adapters -->
+        <!-- external -->
         <docker.java.version>3.4.2</docker.java.version>
         <!-- internal -->
         <slfj.version>2.0.17</slfj.version>
@@ -48,7 +48,7 @@
     </properties>
 
     <dependencies>
-        <!-- adapters -->
+        <!-- external -->
         <dependency>
             <groupId>com.github.docker-java</groupId>
             <artifactId>docker-java</artifactId>

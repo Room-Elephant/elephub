@@ -1,14 +1,12 @@
-package com.roomelephant.elephub.adapters.docker.fetch;
+package com.roomelephant.elephub.external.docker.command;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.ListContainersCmd;
-import com.roomelephant.elephub.container.Container;
-import com.roomelephant.elephub.util.Converter;
+import com.roomelephant.elephub.core.Container;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,13 +15,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class ContainerCmdTest {
+class DockerCmdTest {
 
   @Mock
   DockerClient dockerClient;
-
-  @Mock
-  Converter<Container, com.github.dockerjava.api.model.Container> converter;
 
   @Mock
   ListContainersCmd listContainersCmd;
@@ -34,27 +29,24 @@ class ContainerCmdTest {
   @Mock
   Container container;
 
-  ContainerCmd victim;
+  DockerCmd victim;
 
   @BeforeEach
   void setUp() {
-    victim = new ContainerCmd(dockerClient, converter);
+    victim = new DockerCmd(dockerClient);
   }
 
   @Test
-  void shouldReturnEnrichedContainers() {
+  void shouldReturnDecoratedContainers() {
     when(dockerClient.listContainersCmd()).thenReturn(listContainersCmd);
     when(listContainersCmd.exec()).thenReturn(List.of(dockerContainer));
 
-    when(converter.convert(dockerContainer)).thenReturn(container);
-
-    List<Container> result = victim.fetch();
+    List<Container> result = victim.getContainers();
 
     assertEquals(1, result.size());
-    assertEquals(container, result.getFirst());
+    assertEquals(Container.class, result.getFirst().getClass());
 
     verify(dockerClient).listContainersCmd();
     verify(listContainersCmd).exec();
-    verify(converter).convert(any());
   }
 }
