@@ -1,10 +1,12 @@
-package com.roomelephant.elephub.adapters.docker.connect;
+package com.roomelephant.elephub.external.docker.connect;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 
@@ -83,10 +85,41 @@ class DockerClientFactoryTest {
   @Test
   void shouldThrowExceptionWhenClientCreationFails() throws DockerConnectionException {
     doNothing().when(preValidations).validate(PATH);
-    dockerClientImplMockedStatic.when(() -> DockerClientImpl.getInstance(any(), any())).thenThrow(RuntimeException.class);
+    dockerClientImplMockedStatic.when(() -> DockerClientImpl.getInstance(any(), any()))
+        .thenThrow(RuntimeException.class);
 
     assertThrows(DockerConnectionException.class, () -> victim.getDockerClient(PATH));
     verify(preValidations).validate(PATH);
     verifyNoInteractions(postValidations);
+  }
+
+  @Test
+  void shouldReturnTheSameDockerClientOnSuccessiveCalls() throws DockerConnectionException {
+    doNothing().when(preValidations).validate(PATH);
+    doNothing().when(postValidations).validate(dockerClient);
+
+    DockerClient result = victim.getDockerClient(PATH);
+    DockerClient result2 = victim.getDockerClient(PATH);
+
+    assertEquals(dockerClient, result);
+    assertEquals(result, result2);
+    verify(preValidations, times(2)).validate(PATH);
+    verify(postValidations, times(1)).validate(dockerClient);
+    dockerClientImplMockedStatic.verify(() -> DockerClientImpl.getInstance(any(), any()), times(1));
+  }
+
+  @Test
+  void shouldComputeOnDifferentDockerHostsCalls() throws DockerConnectionException {
+    String secondHost = "second-host";
+    doNothing().when(preValidations).validate(PATH);
+    doNothing().when(preValidations).validate(secondHost);
+    doNothing().when(postValidations).validate(dockerClient);
+
+    victim.getDockerClient(PATH);
+    victim.getDockerClient(secondHost);
+
+    verify(preValidations, times(2)).validate(anyString());
+    verify(postValidations, times(2)).validate(dockerClient);
+    dockerClientImplMockedStatic.verify(() -> DockerClientImpl.getInstance(any(), any()), times(2));
   }
 }

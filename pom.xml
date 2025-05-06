@@ -28,15 +28,15 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- adapters -->
-        <docker.java.version>3.4.2</docker.java.version>
+        <!-- external -->
+        <docker.java.version>3.5.0</docker.java.version>
         <!-- internal -->
         <slfj.version>2.0.17</slfj.version>
-        <logback.version>1.5.13</logback.version>
+        <logback.version>1.5.18</logback.version>
         <lombok.version>1.18.36</lombok.version>
         <!-- test -->
         <junit.version>5.12.1</junit.version>
-        <mockito.version>5.16.1</mockito.version>
+        <mockito.version>5.17.0</mockito.version>
         <byte.buddy.agent.version>1.17.4</byte.buddy.agent.version>
         <!-- build -->
         <assembly.plugin.version>3.7.1</assembly.plugin.version>
@@ -48,7 +48,7 @@
     </properties>
 
     <dependencies>
-        <!-- adapters -->
+        <!-- external -->
         <dependency>
             <groupId>com.github.docker-java</groupId>
             <artifactId>docker-java</artifactId>

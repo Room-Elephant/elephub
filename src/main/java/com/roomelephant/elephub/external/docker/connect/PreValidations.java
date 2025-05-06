@@ -1,4 +1,4 @@
-package com.roomelephant.elephub.adapters.docker.connect;
+package com.roomelephant.elephub.external.docker.connect;
 
 import java.nio.file.Path;
 import java.util.List;

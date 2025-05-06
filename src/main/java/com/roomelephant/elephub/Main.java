@@ -1,14 +1,14 @@
 package com.roomelephant.elephub;
 
 import com.github.dockerjava.api.DockerClient;
-import com.roomelephant.elephub.adapters.docker.connect.DockerClientFactory;
-import com.roomelephant.elephub.adapters.docker.connect.DockerConnectionException;
-import com.roomelephant.elephub.adapters.docker.connect.PostValidations;
-import com.roomelephant.elephub.adapters.docker.connect.PreValidations;
-import com.roomelephant.elephub.adapters.docker.connect.Validations;
-import com.roomelephant.elephub.util.ExcludeFromJacocoGeneratedReport;
+import com.roomelephant.elephub.external.docker.connect.DockerClientFactory;
+import com.roomelephant.elephub.external.docker.connect.DockerConnectionException;
+import com.roomelephant.elephub.external.docker.connect.PostValidations;
+import com.roomelephant.elephub.external.docker.connect.PreValidations;
+import com.roomelephant.elephub.external.docker.connect.Validations;
+import com.roomelephant.elephub.external.docker.command.DockerCmd;
+import com.roomelephant.elephub.support.ExcludeFromJacocoGeneratedReport;
 import lombok.extern.slf4j.Slf4j;
-
 
 @Slf4j
 @ExcludeFromJacocoGeneratedReport
@@ -34,8 +34,17 @@ public class Main {
       System.exit(1);
     }
 
-    dockerClient.listContainersCmd().exec().forEach(container ->
-        log.info("Container: {}, labels: {}", container.getImage(), container.getLabels()));
+    /*EnrichmentChain<com.github.dockerjava.api.model.Container, Container.ContainerBuilder> chain
+        = new EnrichmentChain<>();
+    chain.addEnricher(new InnerEnricher())
+        .addEnricher(new BasicInformationEnricher());*/
+
+    DockerCmd dockerCmd = new DockerCmd(dockerClient);
+
+
+    dockerCmd.getContainers().forEach(container ->
+        log.info("Container: {}", container)
+    );
   }
 
 
