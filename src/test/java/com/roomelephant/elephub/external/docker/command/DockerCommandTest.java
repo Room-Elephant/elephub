@@ -6,7 +6,7 @@ import static org.mockito.Mockito.when;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.ListContainersCmd;
-import com.roomelephant.elephub.core.Container;
+import com.roomelephant.elephub.core.container.DockerContainerWrapper;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,7 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class DockerCmdTest {
+class DockerCommandTest {
 
   @Mock
   DockerClient dockerClient;
@@ -27,13 +27,13 @@ class DockerCmdTest {
   com.github.dockerjava.api.model.Container dockerContainer;
 
   @Mock
-  Container container;
+  DockerContainerWrapper dockerContainerWrapper;
 
-  DockerCmd victim;
+  DockerCommand victim;
 
   @BeforeEach
   void setUp() {
-    victim = new DockerCmd(dockerClient);
+    victim = new DockerCommand(dockerClient);
   }
 
   @Test
@@ -41,10 +41,10 @@ class DockerCmdTest {
     when(dockerClient.listContainersCmd()).thenReturn(listContainersCmd);
     when(listContainersCmd.exec()).thenReturn(List.of(dockerContainer));
 
-    List<Container> result = victim.getContainers();
+    List<DockerContainerWrapper> result = victim.getContainers();
 
     assertEquals(1, result.size());
-    assertEquals(Container.class, result.getFirst().getClass());
+    assertEquals(DockerContainerWrapper.class, result.getFirst().getClass());
 
     verify(dockerClient).listContainersCmd();
     verify(listContainersCmd).exec();

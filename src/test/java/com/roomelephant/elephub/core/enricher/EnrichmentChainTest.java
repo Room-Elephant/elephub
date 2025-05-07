@@ -1,4 +1,4 @@
-package com.roomelephant.elephub.core;
+package com.roomelephant.elephub.core.enricher;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
