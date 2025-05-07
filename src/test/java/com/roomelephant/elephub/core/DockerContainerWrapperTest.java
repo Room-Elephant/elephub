@@ -6,6 +6,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.github.dockerjava.api.model.ContainerPort;
+import com.roomelephant.elephub.core.container.DockerContainerWrapper;
+import com.roomelephant.elephub.core.container.Port;
+import com.roomelephant.elephub.core.container.State;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +20,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class ContainerTest {
+class DockerContainerWrapperTest {
 
   private static final long EPOCH = 1714220000L;
   private static final String IMAGE = "test-image:latest";
@@ -27,7 +30,7 @@ class ContainerTest {
   private static final int PORT2 = 9090;
   private static final Map<String, String> LABELS = Map.of("KEY", "VALUE");
 
-  private Container victim;
+  private DockerContainerWrapper victim;
 
   @Mock
   private com.github.dockerjava.api.model.Container externalContainer;
@@ -43,7 +46,7 @@ class ContainerTest {
 
   @BeforeEach
   void setUp() {
-    victim = new Container(externalContainer);
+    victim = new DockerContainerWrapper(externalContainer);
   }
 
   @Test
@@ -74,7 +77,7 @@ class ContainerTest {
   void shouldGetState() {
     when(externalContainer.getState()).thenReturn(STATE);
 
-    assertEquals(Container.State.RUNNING, victim.getState());
+    assertEquals(State.RUNNING, victim.getState());
     verify(externalContainer).getState();
   }
 
@@ -87,7 +90,7 @@ class ContainerTest {
     when(containerPort2.getPrivatePort()).thenReturn(PORT2);
     when(containerPort3.getPublicPort()).thenReturn(null);
 
-    assertEquals(List.of(new Container.Port(PORT1, PORT1), new Container.Port(PORT2, PORT2)),
+    assertEquals(List.of(new Port(PORT1, PORT1), new Port(PORT2, PORT2)),
         victim.getPorts());
     verify(externalContainer).getPorts();
     verify(containerPort1, times(2)).getPublicPort();
@@ -106,10 +109,10 @@ class ContainerTest {
   @Test
   void shouldThrowExceptionOnNullExternalContainer() {
     IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () ->
-        new Container(null)
+        new DockerContainerWrapper(null)
     );
 
-    assertEquals("inner is null", exception.getMessage());
+    assertEquals("dockerContainer is null", exception.getMessage());
   }
 
   @Test
