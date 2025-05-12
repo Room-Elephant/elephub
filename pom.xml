@@ -37,7 +37,7 @@
         <!-- test -->
         <junit.version>5.12.1</junit.version>
         <mockito.version>5.17.0</mockito.version>
-        <byte.buddy.agent.version>1.17.4</byte.buddy.agent.version>
+        <byte.buddy.agent.version>1.17.5</byte.buddy.agent.version>
         <!-- build -->
         <assembly.plugin.version>3.7.1</assembly.plugin.version>
         <checkstyle.plugin.version>3.6.0</checkstyle.plugin.version>
