@@ -35,7 +35,7 @@
         <logback.version>1.5.18</logback.version>
         <lombok.version>1.18.36</lombok.version>
         <!-- test -->
-        <junit.version>5.12.1</junit.version>
+        <junit.version>5.13.0</junit.version>
         <mockito.version>5.17.0</mockito.version>
         <byte.buddy.agent.version>1.17.4</byte.buddy.agent.version>
         <!-- build -->
