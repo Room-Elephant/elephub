@@ -29,7 +29,7 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- external -->
-        <docker.java.version>3.5.0</docker.java.version>
+        <docker.java.version>3.5.1</docker.java.version>
         <!-- internal -->
         <slfj.version>2.0.17</slfj.version>
         <logback.version>1.5.18</logback.version>
